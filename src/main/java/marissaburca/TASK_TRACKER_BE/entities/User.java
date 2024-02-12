@@ -1,6 +1,7 @@
 package marissaburca.TASK_TRACKER_BE.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -10,6 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -19,7 +21,7 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 
-@JsonIgnoreProperties({"password", "authorities", "accountNonExpired", "enabled", "accountNonLocked", "credentialsNonExpired", "email"})
+@JsonIgnoreProperties({"password", "authorities", "accountNonExpired", "enabled", "accountNonLocked", "credentialsNonExpired"})
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,8 +36,9 @@ public class User implements UserDetails {
     @Column(name = "gender")
     @Enumerated(EnumType.STRING)
     private Gender gender;
-    @Column(name = "avatar_link")
-    private String avatar;
+    @ManyToOne
+    @JoinColumn(name = "avatar")
+    private Avatar avatar;
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -43,6 +46,10 @@ public class User implements UserDetails {
     private String email;
     @Column(name = "password")
     private String password;
+    @OneToMany(mappedBy="user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Column(name = "personal_tasks")
+    @JsonManagedReference
+    private List<Task> tasks= new ArrayList<>();
 
 
     @Override
@@ -76,10 +83,23 @@ public class User implements UserDetails {
     }
 
 
+    //NEEDED METHODS
+    // METHOD TO ADD A TASK
+    public void addTask(Task task) {
+        tasks.add(task);
+        task.setUser(this);
+    }
+
+    // METHOD TO REMOVE A TASK
+    public void removeTask(Task task) {
+        tasks.remove(task);
+        task.setUser(null);
+    }
+
     //TO_STRING
     @Override
     public String toString () {
-        return "User with id:" + id + " | name: " + name + " | surname: " + surname + " | username: " + username + " | avatar: " + avatar + " | role=" + role;
+        return "User with id:" + id + " | name: " + name + " | surname: " + surname + " | username: " + username + " | avatar: " + avatar + " | role=" + role + " | tasks: " + tasks;
     }
 
 }

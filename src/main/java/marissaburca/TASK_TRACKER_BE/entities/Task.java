@@ -1,5 +1,6 @@
 package marissaburca.TASK_TRACKER_BE.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -30,6 +31,10 @@ public class Task {
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private TaskStatus status;
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    @JsonIgnore
+    private User user;
 
 
     //TO_STRING
