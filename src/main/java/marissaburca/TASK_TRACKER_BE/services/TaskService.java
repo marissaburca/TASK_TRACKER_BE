@@ -1,7 +1,9 @@
 package marissaburca.TASK_TRACKER_BE.services;
 
 
+import jakarta.validation.constraints.Email;
 import marissaburca.TASK_TRACKER_BE.entities.Task;
+import marissaburca.TASK_TRACKER_BE.entities.TaskStatus;
 import marissaburca.TASK_TRACKER_BE.entities.User;
 import marissaburca.TASK_TRACKER_BE.exceptions.NotFound;
 import marissaburca.TASK_TRACKER_BE.payloads.task.TaskDTO;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -30,24 +33,24 @@ public class TaskService {
         return taskDAO.findById(id).orElseThrow(() -> new NotFound(id));
     }
 
-    public TaskRespDTO saveTask ( TaskDTO body ) {
-        // OBTAINING USERNAME OF USER LOGGED DURING SAVING ACTION
+    public TaskRespDTO saveTask (TaskDTO body ) {
+        // OBTAINING USERNAME( in our case will correspond to email) OF USER LOGGED DURING SAVING ACTION
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username;
+        String email;
         if (principal instanceof UserDetails) {
-            username = ((UserDetails)principal).getUsername();
+            email = ((UserDetails)principal).getUsername();
         } else {
-            username = principal.toString();
+            email = principal.toString();
         }
 
-        // RECOVER USER FROM DB USING USERNAME
-        User user = userDAO.findByUsername(username).orElseThrow(() -> new NotFound("User with username '" + username + "' not found!"));
+        // RECOVER USER FROM DB USING USERNAME(email)
+        User user = userDAO.findByEmail(email).orElseThrow(() -> new NotFound("User with email '" + email + "' not found!"));
         Task newTask = new Task();
         newTask.setTitle(body.title());
         newTask.setDescription(body.description());
         newTask.setDate(body.date());
         newTask.setTime(body.time());
-        newTask.setStatus(body.status());
+        newTask.setStatus(TaskStatus.CREATED);
         newTask.setUser(user);
         Task savedTask = taskDAO.save(newTask);
         return new TaskRespDTO(savedTask.getId());

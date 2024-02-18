@@ -75,8 +75,8 @@ public class AuthService {
         message.setFrom(me);
         message.setTo(user.getEmail());
         System.out.println(user.getEmail());
-        message.setSubject("Welcome to TASK TRACKER");
-        message.setText("Hello " + user.getUsername() + "! Welcome to TASK TRACKER! We are glad to have you on board.");
+        message.setSubject("Welcome to TASK TRACKER 🥳");
+        message.setText("Hello " + user.getUsername() + "🤩! Welcome to TASK TRACKER! We are glad to have you on board.");
         // Sending l'email
         mailSender.send(message);
     }

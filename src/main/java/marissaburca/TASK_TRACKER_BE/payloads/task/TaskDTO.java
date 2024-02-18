@@ -9,5 +9,5 @@ import java.time.LocalTime;
 
 public record TaskDTO(@NotEmpty(message = "Title field must not be empty") String title, String description,
                       @NotNull(message = "Name field must not be empty") LocalDate date,
-                      @NotNull(message = "Name field must not be empty") LocalTime time, TaskStatus status) {
+                      @NotNull(message = "Name field must not be empty") LocalTime time) {
 }

@@ -19,7 +19,6 @@ public class AvatarController {
     private AvatarService avatarService;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('ADMIN')")
     public List<Avatar> getAllAvatars () {
         return avatarService.getAllAvatars();
     }

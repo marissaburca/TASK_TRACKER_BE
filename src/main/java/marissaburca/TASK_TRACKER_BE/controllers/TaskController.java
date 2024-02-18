@@ -31,7 +31,7 @@ public class TaskController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public TaskRespDTO saveTask ( @RequestBody @Validated TaskDTO payload, BindingResult validation ) throws BadRequest {
+    public TaskRespDTO saveTask ( @RequestBody @Validated TaskDTO payload, BindingResult validation) throws BadRequest {
         if (validation.hasErrors()) {
             throw new BadRequest("Errors in validation " + validation.getAllErrors());
         } else {
