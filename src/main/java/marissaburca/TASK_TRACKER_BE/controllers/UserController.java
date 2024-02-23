@@ -3,6 +3,7 @@ package marissaburca.TASK_TRACKER_BE.controllers;
 import marissaburca.TASK_TRACKER_BE.entities.User;
 import marissaburca.TASK_TRACKER_BE.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +32,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser ( @PathVariable long userId ) {
         userService.findByIdAndDelete(userId);
     }

@@ -53,7 +53,7 @@ public class TaskService {
         newTask.setStatus(TaskStatus.CREATED);
         newTask.setUser(user);
         Task savedTask = taskDAO.save(newTask);
-        return new TaskRespDTO(savedTask.getId());
+        return new TaskRespDTO(savedTask.getId(), savedTask.getTitle(), savedTask.getDescription(), savedTask.getDate(), savedTask.getTime(), savedTask.getStatus());
     }
 
     public Task findByIdAndUpdate ( long id, Task body ) {
