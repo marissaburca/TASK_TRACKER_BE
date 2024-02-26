@@ -7,7 +7,7 @@ public record UserDTO(@NotEmpty(message = "Name field must not be empty") String
                       @NotEmpty(message = "Surname field must not be empty") String surname,
                       @NotEmpty(message = "Username field must not be empty") String username, Gender gender,
                       Long avatarId, @NotEmpty(message = "Email field must not be empty") String email,
-                      @NotEmpty(message = "Password field must not be empty") String password
+                     String password
 
 
 ) {

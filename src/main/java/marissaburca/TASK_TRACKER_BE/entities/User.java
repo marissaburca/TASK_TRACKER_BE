@@ -46,7 +46,7 @@ public class User implements UserDetails {
     private String email;
     @Column(name = "password")
     private String password;
-    @OneToMany(mappedBy="user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy="user", orphanRemoval = true)
     @Column(name = "personal_tasks")
     @JsonManagedReference
     private List<Task> tasks= new ArrayList<>();
@@ -77,10 +77,6 @@ public class User implements UserDetails {
         return true;
     }
 
-    @Override
-    public String getUsername () {
-        return this.email;
-    }
 
 
     //NEEDED METHODS

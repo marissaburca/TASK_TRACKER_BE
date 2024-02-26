@@ -7,6 +7,7 @@ import marissaburca.TASK_TRACKER_BE.exceptions.BadRequest;
 import marissaburca.TASK_TRACKER_BE.exceptions.Unauthorized;
 import marissaburca.TASK_TRACKER_BE.payloads.user.UserDTO;
 import marissaburca.TASK_TRACKER_BE.payloads.user.UserLoginDTO;
+import marissaburca.TASK_TRACKER_BE.payloads.user.UserPswdDTO;
 import marissaburca.TASK_TRACKER_BE.payloads.user.UserRespDTO;
 import marissaburca.TASK_TRACKER_BE.repositories.UserDAO;
 import marissaburca.TASK_TRACKER_BE.security.JWTTools;

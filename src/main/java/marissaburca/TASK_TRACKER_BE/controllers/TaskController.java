@@ -1,12 +1,14 @@
 package marissaburca.TASK_TRACKER_BE.controllers;
 
 import marissaburca.TASK_TRACKER_BE.entities.Task;
+import marissaburca.TASK_TRACKER_BE.entities.User;
 import marissaburca.TASK_TRACKER_BE.exceptions.BadRequest;
 import marissaburca.TASK_TRACKER_BE.payloads.task.TaskDTO;
 import marissaburca.TASK_TRACKER_BE.payloads.task.TaskRespDTO;
 import marissaburca.TASK_TRACKER_BE.services.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +22,8 @@ public class TaskController {
     private TaskService taskService;
 
     @GetMapping
-    public List<Task> getTasks () {
-        return taskService.getAllTasks();
+    public List<Task> getTasks (@AuthenticationPrincipal User loggedUser) {
+        return taskService.getAllTasksForCurrentUser(loggedUser);
     }
 
     @GetMapping("/{taskId}")
@@ -31,11 +33,11 @@ public class TaskController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public TaskRespDTO saveTask ( @RequestBody @Validated TaskDTO payload, BindingResult validation) throws BadRequest {
+    public TaskRespDTO saveTask ( @RequestBody @Validated TaskDTO payload, BindingResult validation,@AuthenticationPrincipal User loggedUser) throws BadRequest {
         if (validation.hasErrors()) {
             throw new BadRequest("Errors in validation " + validation.getAllErrors());
         } else {
-            return taskService.saveTask(payload);
+            return taskService.saveTask(payload, loggedUser);
         }
     }
 

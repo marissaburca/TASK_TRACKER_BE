@@ -25,24 +25,20 @@ public class TaskService {
     @Autowired
     private UserDAO userDAO;
 
-    public List<Task> getAllTasks () {
-        return taskDAO.findAll();
-    }
+
+    public List<Task> getAllTasksForCurrentUser(User loggedUser) {
+        String email = loggedUser.getEmail();
+        User user = userDAO.findByEmail(email).orElseThrow(() -> new NotFound("User with email '" + email + "' not found!"));
+
+        return taskDAO.findByUser(user);
+}
 
     public Task findById ( long id ) {
         return taskDAO.findById(id).orElseThrow(() -> new NotFound(id));
     }
 
-    public TaskRespDTO saveTask (TaskDTO body ) {
-        // OBTAINING USERNAME( in our case will correspond to email) OF USER LOGGED DURING SAVING ACTION
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String email;
-        if (principal instanceof UserDetails) {
-            email = ((UserDetails)principal).getUsername();
-        } else {
-            email = principal.toString();
-        }
-
+    public TaskRespDTO saveTask (TaskDTO body , User loggedUser) {
+        String email = loggedUser.getEmail();
         // RECOVER USER FROM DB USING USERNAME(email)
         User user = userDAO.findByEmail(email).orElseThrow(() -> new NotFound("User with email '" + email + "' not found!"));
         Task newTask = new Task();

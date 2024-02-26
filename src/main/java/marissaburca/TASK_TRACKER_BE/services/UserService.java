@@ -1,12 +1,18 @@
 package marissaburca.TASK_TRACKER_BE.services;
 
+import marissaburca.TASK_TRACKER_BE.entities.Avatar;
 import marissaburca.TASK_TRACKER_BE.entities.User;
+import marissaburca.TASK_TRACKER_BE.exceptions.BadRequest;
 import marissaburca.TASK_TRACKER_BE.exceptions.NotFound;
+import marissaburca.TASK_TRACKER_BE.payloads.user.UserDTO;
+import marissaburca.TASK_TRACKER_BE.payloads.user.UserPswdDTO;
 import marissaburca.TASK_TRACKER_BE.repositories.UserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +23,12 @@ public class UserService {
     private UserDAO userDAO;
     @Autowired
     private JavaMailSender mailSender;
+
+    @Autowired
+    private AvatarService avatarService;
+    @Autowired
+    @Lazy
+    private PasswordEncoder bcrypt;
     @Value("${spring.mail.username}")
     String me;
 
@@ -28,21 +40,26 @@ public class UserService {
         return userDAO.findById(id).orElseThrow(() -> new NotFound(id));
     }
 
-    public User findByIdAndUpdate ( long id, User body ) {
-        User found = this.findById(id);
-        found.setName(body.getName());
-        found.setSurname(body.getSurname());
-        found.setUsername(body.getUsername());
-        found.setGender(body.getGender());
-        found.setAvatar(body.getAvatar());
-        found.setEmail(body.getEmail());
-        found.setPassword(body.getPassword());
-        found.setTasks(body.getTasks());
-        return userDAO.save(found);
+    public User findByAuthAndUpdate ( UserDTO body ,User loggedUser) {
+        loggedUser.setName(body.name());
+        loggedUser.setSurname(body.surname());
+        loggedUser.setUsername(body.username());
+        loggedUser.setGender(body.gender());
+        Avatar avatar = avatarService.findById(body.avatarId());
+        loggedUser.setAvatar(avatar);
+        loggedUser.setEmail(body.email());
+        return userDAO.save(loggedUser);
+    }
+    public void updatePassword ( UserPswdDTO payload, User loggedUser){
+        if (bcrypt.matches(payload.password(), loggedUser.getPassword())){
+            throw new BadRequest("New password cannot correspond to the old one.");
+        }
+        loggedUser.setPassword(bcrypt.encode(payload.password()));
     }
 
-    public void findByIdAndDelete ( long id ) {
-        User found = this.findById(id);
+
+    public void findByIdAndDelete ( long actualId ) {
+        User found = this.findById(actualId);
         sendGoodbyeEmail(found);
         userDAO.delete(found);
     }
@@ -58,7 +75,7 @@ public class UserService {
         System.out.println(user.getEmail());
         message.setSubject("We're sorry you're leaving us!'");
         message.setText("Dear " + user.getUsername() + ", we will miss you, but we hope that our app has been useful to you and that, perhaps, we will see you again soon.");
-        // Send l'email
+        // Send email
         mailSender.send(message);
     }
 
