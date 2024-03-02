@@ -39,9 +39,9 @@ public class UserController {
        userService.updatePassword(pswd, loggedUser);
     }
 
-    @DeleteMapping("/{userId}")
+    @DeleteMapping("/deleteAccount")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteUser ( @PathVariable long userId ) {
-        userService.findByIdAndDelete(userId);
+    public void deleteUser ( @AuthenticationPrincipal User loggedUser) {
+        userService.findAndDelete(loggedUser);
     }
 }

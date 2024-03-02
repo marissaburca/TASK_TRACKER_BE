@@ -50,6 +50,10 @@ public class User implements UserDetails {
     @Column(name = "personal_tasks")
     @JsonManagedReference
     private List<Task> tasks= new ArrayList<>();
+    @OneToMany(mappedBy="user", orphanRemoval = true)
+    @Column(name = "notes")
+    @JsonManagedReference
+    private List<Note> notes= new ArrayList<>();
 
 
     @Override

@@ -28,6 +28,9 @@ public class Task {
     private LocalDate date;
     @Column(name = "time")
     private LocalTime time;
+    @Column(name = "priority")
+    @Enumerated(EnumType.STRING)
+    private TaskPriority priority;
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private TaskStatus status;

@@ -67,7 +67,8 @@ public class AuthService {
         newUser = userDAO.save(newUser);
         sendWelcomeEmail(newUser);
 
-        return new UserRespDTO(newUser.getId());
+        return new UserRespDTO(newUser.getId(), newUser.getAvatar().getUrl(), newUser.getUsername());
+
 
     }
     private void sendWelcomeEmail(User user) {

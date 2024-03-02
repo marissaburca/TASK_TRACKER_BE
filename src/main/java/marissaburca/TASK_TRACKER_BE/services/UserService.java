@@ -58,10 +58,9 @@ public class UserService {
     }
 
 
-    public void findByIdAndDelete ( long actualId ) {
-        User found = this.findById(actualId);
-        sendGoodbyeEmail(found);
-        userDAO.delete(found);
+    public void findAndDelete ( User loggedUser ) {
+        sendGoodbyeEmail(loggedUser);
+        userDAO.delete(loggedUser);
     }
 
     public User findByEmail ( String email ) throws NotFound {
