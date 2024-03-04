@@ -35,8 +35,8 @@ public class UserController {
         return userService.findByAuthAndUpdate(modifiedUserPayload, loggedUser);
     }
     @PutMapping("/updatePassword")
-    public void updatePswd( @RequestBody UserPswdDTO pswd, @AuthenticationPrincipal User loggedUser ) {
-       userService.updatePassword(pswd, loggedUser);
+    public void updatePassword( @RequestBody UserPswdDTO password, @AuthenticationPrincipal User loggedUser ) {
+       userService.updatePassword(password, loggedUser);
     }
 
     @DeleteMapping("/deleteAccount")

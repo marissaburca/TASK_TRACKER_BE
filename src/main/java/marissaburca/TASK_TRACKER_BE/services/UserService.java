@@ -50,12 +50,15 @@ public class UserService {
         loggedUser.setEmail(body.email());
         return userDAO.save(loggedUser);
     }
-    public void updatePassword ( UserPswdDTO payload, User loggedUser){
-        if (bcrypt.matches(payload.password(), loggedUser.getPassword())){
-            throw new BadRequest("New password cannot correspond to the old one.");
+    public void updatePassword(UserPswdDTO payload, User loggedUser) {
+        if (!bcrypt.matches(payload.password(), loggedUser.getPassword())) {
+            loggedUser.setPassword(bcrypt.encode(payload.password()));
+            userDAO.save(loggedUser);
+        } else {
+            throw new BadRequest("New password cannot be the same as the old one.");
         }
-        loggedUser.setPassword(bcrypt.encode(payload.password()));
     }
+
 
 
     public void findAndDelete ( User loggedUser ) {
