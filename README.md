@@ -23,7 +23,7 @@ npm install
 npm start
 ```
 
-The server will start, and you can begin making requests to `http://localhost:3001/`.
+When server will start, go in the MainRuner, uncomment the save methos, so it will fill your db with avatars choosable as profile image from users. After that, comment them again, and you can begin making requests to `http://localhost:3001/`.
 
 ## API Documentation 📚
 
