@@ -33,6 +33,7 @@ public class ExceptionsHandler {
     }
 
     //ERROR 400
+    @ExceptionHandler(BadRequest.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorsDTO handleBadRequest ( BadRequest exception ) {
         return new ErrorsDTO(exception.getMessage(), LocalDateTime.now());
