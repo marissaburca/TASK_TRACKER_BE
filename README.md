@@ -45,4 +45,4 @@ Let's collaborate to make Task Tracker the go-to solution for managing tasks and
 
 ---
 
-Thank you for your interest in our project, and happy coding! 🎉👨‍💻🎉
+Thank you for your interest in my project, and happy coding! 🎉👨‍💻🎉
